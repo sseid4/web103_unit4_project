@@ -2,9 +2,8 @@ import express from 'express'
 import path from 'path'
 import favicon from 'serve-favicon'
 import dotenv from 'dotenv'
-
-// import the router from your routes file
-
+import carsRouter from './routes/cars.js'
+import { initializeDatabase } from './config/schema.js'
 
 dotenv.config()
 
@@ -22,8 +21,7 @@ else if (process.env.NODE_ENV === 'production') {
     app.use(express.static('public'))
 }
 
-// specify the api path for the server to use
-
+app.use('/api/cars', carsRouter)
 
 if (process.env.NODE_ENV === 'production') {
     app.get('/*', (_, res) =>
@@ -31,6 +29,13 @@ if (process.env.NODE_ENV === 'production') {
     )
 }
 
-app.listen(PORT, () => {
-    console.log(`server listening on http://localhost:${PORT}`)
-})
+initializeDatabase()
+    .then(() => {
+        app.listen(PORT, () => {
+            console.log(`server listening on http://localhost:${PORT}`)
+        })
+    })
+    .catch((error) => {
+        console.error('Unable to initialize database schema:', error)
+        process.exitCode = 1
+    })
