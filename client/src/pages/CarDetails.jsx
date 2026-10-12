@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { deleteCar, getCar } from '../services/CarsAPI'
-import { calculatePrice } from '../utilities/carValidation'
+import { calculatePrice, toCustomization } from '../utilities/carValidation'
+import CarOptionTiles from '../components/CarOptionTiles'
 import '../App.css'
+import '../css/Customize.css'
 
 const CarDetails = () => {
     const { id } = useParams()
@@ -28,26 +30,31 @@ const CarDetails = () => {
     if (error) return <main className='page-content'><p className='form-error'>{error}</p></main>
     if (!car) return <main className='page-content'><p>Loading car...</p></main>
 
+    const customization = toCustomization(car)
+    const price = Number(car.total_price) || calculatePrice({ ...car, ...customization })
+
     return (
         <main className='page-content'>
-            <article>
-                <img className='car-detail-image' src={car.image} alt={`${car.year} ${car.make} ${car.model}`} />
-                <h2>{car.year} {car.make} {car.model}</h2>
-                <p>{car.description}</p>
-                <div
-                    className='car-preview detail-preview'
-                    style={{ '--preview-color': car.exterior_color }}
-                >
-                    <span className='preview-car'>🚘</span>
-                    <span>{car.exterior_color} exterior · {car.wheel_style} wheels</span>
+            <article className='car-detail'>
+                <header>
+                    <h2>🚗 {car.year} {car.make} {car.model}</h2>
+                    <p>{car.description}</p>
+                </header>
+                <div className='car-detail-body'>
+                    <div className='car-detail-side'>
+                        <p className='price-tag'>💰 ${price.toLocaleString()}</p>
+                        <Link to={`/edit/${car.id}`} role='button'>Edit</Link>
+                        <button type='button' onClick={handleDelete}>Delete</button>
+                    </div>
+                    <div className='summary-grid'>
+                        <img
+                            className='summary-tile car-photo'
+                            src={car.image}
+                            alt={`${car.year} ${car.make} ${car.model}`}
+                        />
+                        <CarOptionTiles customization={customization} />
+                    </div>
                 </div>
-                <p>Interior: {car.interior}</p>
-                <p>Trim package: {car.trim_package}</p>
-                <p className='price-summary'>
-                    Total price: ${(Number(car.total_price) || calculatePrice(car)).toLocaleString()}
-                </p>
-                <Link to={`/edit/${car.id}`} role='button'>Edit</Link>
-                <button type='button' onClick={handleDelete}>Delete</button>
             </article>
         </main>
     )
