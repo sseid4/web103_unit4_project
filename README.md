@@ -1,10 +1,10 @@
 # WEB103 Project 4 - BOLT BUCKET
 
-Submitted by: **Siyam**
+Submitted by: **Siyam Seid**
 
 About this web app: **BOLT BUCKET is a React car customization app backed by an Express API and Render PostgreSQL. Users can configure, price, save, edit, and delete custom car builds.**
 
-Time spent: **To be updated**
+Time spent: **3**
 
 ## Required Features
 
