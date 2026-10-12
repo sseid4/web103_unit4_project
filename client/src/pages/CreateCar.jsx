@@ -1,12 +1,19 @@
 import React from 'react'
-import '../App.css'
+import { useNavigate } from 'react-router-dom'
+import CarForm from './CarForm'
+import { createCar } from '../services/CarsAPI'
 
 const CreateCar = () => {
+    const navigate = useNavigate()
 
     return (
-        <div>
-
-        </div>
+        <CarForm
+            submitLabel='Create Car'
+            onSubmit={async (car) => {
+                const createdCar = await createCar(car)
+                navigate(`/customcars/${createdCar.id}`)
+            }}
+        />
     )
 }
 
