@@ -6,21 +6,50 @@ export const customizationOptions = {
         { value: 'silver', label: 'Silver', price: 1000, hex: '#a8a29e' }
     ],
     wheelStyle: [
-        { value: 'standard', label: 'Standard wheels', price: 0 },
-        { value: 'sport', label: 'Sport wheels', price: 1500 },
-        { value: 'offroad', label: 'Off-road wheels', price: 2200 }
+        { value: 'standard', label: 'Standard wheels', price: 0, hex: '#3f3f46', icon: '🛞' },
+        { value: 'sport', label: 'Sport wheels', price: 1500, hex: '#7f1d1d', icon: '🏁' },
+        { value: 'offroad', label: 'Off-road wheels', price: 2200, hex: '#57534e', icon: '⛰️' }
     ],
     interior: [
-        { value: 'cloth', label: 'Cloth', price: 0 },
-        { value: 'leather', label: 'Leather', price: 1800 },
-        { value: 'carbon', label: 'Carbon fiber', price: 3200 }
+        { value: 'cloth', label: 'Cloth', price: 0, hex: '#78716c', icon: '🧵' },
+        { value: 'leather', label: 'Leather', price: 1800, hex: '#7c2d12', icon: '💺' },
+        { value: 'carbon', label: 'Carbon fiber', price: 3200, hex: '#27272a', icon: '🖤' }
     ],
     trimPackage: [
-        { value: 'basic', label: 'Basic', price: 0 },
-        { value: 'premium', label: 'Premium', price: 2500 },
-        { value: 'performance', label: 'Performance', price: 4500 }
+        { value: 'basic', label: 'Basic', price: 0, hex: '#52525b', icon: '🚗' },
+        { value: 'premium', label: 'Premium', price: 2500, hex: '#a16207', icon: '⭐' },
+        { value: 'performance', label: 'Performance', price: 4500, hex: '#991b1b', icon: '⚡' }
     ]
 }
+
+export const customizationCategories = [
+    { field: 'exteriorColor', label: 'Exterior', icon: '🖌️' },
+    { field: 'wheelStyle', label: 'Wheels', icon: '🛞' },
+    { field: 'interior', label: 'Interior', icon: '💺' },
+    { field: 'trimPackage', label: 'Trim', icon: '😎' }
+]
+
+export const findOption = (field, value) =>
+    customizationOptions[field].find((option) => option.value === value)
+
+// Returns a reason the option can't be combined with the current build, or ''
+export const getOptionConflict = (field, value, car) => {
+    if (field === 'trimPackage' && value === 'performance' && car.wheelStyle === 'standard') {
+        return 'Needs sport or off-road wheels'
+    }
+    if (field === 'wheelStyle' && value === 'standard' && car.trimPackage === 'performance') {
+        return 'Not with performance trim'
+    }
+    return ''
+}
+
+// Maps a car row from the database (snake_case) to the form's field names
+export const toCustomization = (car) => ({
+    exteriorColor: car.exterior_color || defaultCustomization.exteriorColor,
+    wheelStyle: car.wheel_style || defaultCustomization.wheelStyle,
+    interior: car.interior || defaultCustomization.interior,
+    trimPackage: car.trim_package || defaultCustomization.trimPackage
+})
 
 export const defaultCustomization = {
     exteriorColor: 'red',
