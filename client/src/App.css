@@ -11,71 +11,19 @@
     padding-bottom: 50px;
 }
 
-.page-content {
-    max-width: 900px;
+#root main.page-content {
+    display: block;
+    max-width: 1200px;
     margin: 2rem auto;
-    padding: 0 1rem;
+    padding: 0 1.5rem;
+    overflow: visible;
 }
 
 .page-content article {
-    background: rgba(0, 0, 0, 0.8);
-    padding: 1.5rem;
-}
-
-.page-content form {
-    max-width: 650px;
+    background: rgba(0, 0, 0, 0.9);
+    padding: 1.5rem 2rem;
 }
 
 .form-error {
     color: #ffb3b3;
-}
-
-.car-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 1rem;
-}
-
-.car-grid article {
-    margin: 0;
-}
-
-.car-grid img,
-.car-detail-image {
-    width: 100%;
-    max-height: 360px;
-    object-fit: cover;
-}
-
-.car-detail-image {
-    max-width: 700px;
-}
-
-.car-preview {
-    align-items: center;
-    background: linear-gradient(135deg, var(--preview-color), #111);
-    border-radius: 0.75rem;
-    color: white;
-    display: flex;
-    gap: 1rem;
-    justify-content: center;
-    margin: 1rem 0;
-    min-height: 110px;
-    padding: 1rem;
-    text-transform: capitalize;
-}
-
-.preview-car {
-    filter: drop-shadow(0 0 0.4rem rgba(255, 255, 255, 0.6));
-    font-size: 4rem;
-}
-
-.price-summary {
-    font-size: 1.2rem;
-    font-weight: 700;
-}
-
-.detail-preview {
-    justify-content: flex-start;
-    max-width: 700px;
 }
