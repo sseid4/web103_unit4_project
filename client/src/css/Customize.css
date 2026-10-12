@@ -1,0 +1,262 @@
+/* ---------- Customize toolbar + option picker ---------- */
+
+.customize-toolbar {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.category-buttons {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+#root .category-buttons button.active {
+    border: 2px solid var(--color);
+}
+
+.option-picker {
+    position: absolute;
+    top: calc(100% - 6px);
+    left: 2rem;
+    right: 2rem;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    padding: 2rem 2.5rem;
+    background: black;
+    border: 3px solid var(--primary);
+    border-radius: 4px;
+}
+
+.option-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+    flex: 1;
+}
+
+#root .option-tile {
+    position: relative;
+    width: 140px;
+    height: 90px;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    border-radius: 2px;
+    background: linear-gradient(170deg, var(--tile-color), #050505 140%);
+    text-transform: none;
+    font-weight: 400;
+    cursor: pointer;
+}
+
+#root .option-tile:hover {
+    border: 1px solid white;
+}
+
+#root .option-tile.selected {
+    border: 3px solid white;
+}
+
+#root .option-tile:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+.tile-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    font-size: 2.2rem;
+}
+
+/* Name + price show on hover, like the demo */
+.tile-info {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    padding: 4px;
+    background: rgba(0, 0, 0, 0.75);
+    color: white;
+    font-size: 0.8rem;
+    line-height: 1.2;
+    opacity: 0;
+    transition: opacity 0.15s;
+}
+
+.option-tile:hover .tile-info,
+.option-tile:disabled .tile-info {
+    opacity: 1;
+}
+
+.tile-info small {
+    color: #ffb3b3;
+    font-size: 0.7rem;
+}
+
+#root .picker-done {
+    flex-shrink: 0;
+}
+
+/* ---------- Form card ---------- */
+
+.customize-card header h2 {
+    margin-bottom: 0.5rem;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: 1.5rem;
+}
+
+.form-grid .full-width {
+    grid-column: 1 / -1;
+}
+
+.form-grid textarea {
+    min-height: 80px;
+}
+
+/* ---------- Selected-option tiles (form preview + details page) ---------- */
+
+.summary-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    margin-top: 1rem;
+    flex: 1;
+}
+
+.summary-tile {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    border-radius: 2px;
+    background: linear-gradient(170deg, var(--tile-color), #050505 140%);
+}
+
+.summary-tile .tile-icon {
+    font-size: 4rem;
+}
+
+.tile-caption {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 0.4rem 0.75rem;
+    background: rgba(0, 0, 0, 0.7);
+    font-size: 0.9rem;
+}
+
+.car-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* ---------- Price ---------- */
+
+.price-box {
+    position: fixed;
+    left: 40px;
+    bottom: 30px;
+    z-index: 5;
+    padding: 0.6rem 1.5rem;
+    background: var(--primary);
+    border: 2px solid black;
+    border-radius: 2px;
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+#root .price-tag {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+/* ---------- View cars list ---------- */
+
+.car-card {
+    margin-bottom: 1.5rem !important;
+}
+
+.car-card-body {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    padding-left: 6rem;
+}
+
+.car-specs {
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: 2rem;
+}
+
+#root .car-specs p {
+    margin-bottom: 0.4rem;
+    font-size: 0.95rem;
+}
+
+.car-card-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* ---------- Car details ---------- */
+
+.car-detail-body {
+    display: flex;
+    gap: 2rem;
+}
+
+.car-detail-side {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    min-width: 180px;
+}
+
+/* ---------- Small screens ---------- */
+
+@media (max-width: 760px) {
+    .option-picker {
+        left: 0;
+        right: 0;
+        flex-direction: column;
+        padding: 1.25rem;
+    }
+
+    .form-grid,
+    .summary-grid,
+    .car-specs {
+        grid-template-columns: 1fr;
+    }
+
+    .car-card-body,
+    .car-detail-body {
+        flex-direction: column;
+        align-items: flex-start;
+        padding-left: 0;
+    }
+
+    .price-box {
+        left: 16px;
+        bottom: 16px;
+        font-size: 1.4rem;
+    }
+}
