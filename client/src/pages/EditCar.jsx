@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import CarForm from './CarForm'
 import { getCar, editCar } from '../services/CarsAPI'
+import { toCustomization } from '../utilities/carValidation'
 
 const EditCar = () => {
     const { id } = useParams()
@@ -11,12 +12,7 @@ const EditCar = () => {
 
     useEffect(() => {
         getCar(id)
-            .then((savedCar) => setCar({
-                ...savedCar,
-                exteriorColor: savedCar.exterior_color || 'red',
-                wheelStyle: savedCar.wheel_style || 'standard',
-                trimPackage: savedCar.trim_package || 'basic'
-            }))
+            .then((savedCar) => setCar({ ...savedCar, ...toCustomization(savedCar) }))
             .catch((requestError) => setError(requestError.message))
     }, [id])
 
