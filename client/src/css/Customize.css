@@ -217,6 +217,16 @@
     align-items: center;
 }
 
+.car-card-links {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.85rem;
+}
+
+#root .car-card-links a {
+    color: #d4d4d4;
+}
+
 /* ---------- Car details ---------- */
 
 .car-detail-body {
