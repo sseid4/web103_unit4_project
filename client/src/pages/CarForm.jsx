@@ -2,10 +2,13 @@ import React, { useState } from 'react'
 import {
     validateCar,
     calculatePrice,
-    customizationOptions,
+    customizationCategories,
     defaultCustomization
 } from '../utilities/carValidation'
+import OptionPicker from '../components/OptionPicker'
+import CarOptionTiles from '../components/CarOptionTiles'
 import '../App.css'
+import '../css/Customize.css'
 
 export const emptyCar = {
     make: '',
@@ -20,22 +23,24 @@ const CarForm = ({ initialCar = emptyCar, submitLabel, onSubmit }) => {
     const [car, setCar] = useState({ ...emptyCar, ...initialCar })
     const [errors, setErrors] = useState({})
     const [requestError, setRequestError] = useState('')
+    const [openCategory, setOpenCategory] = useState(null)
 
     const handleChange = ({ target }) => {
         setCar((currentCar) => ({ ...currentCar, [target.name]: target.value }))
         setErrors((currentErrors) => ({ ...currentErrors, [target.name]: '' }))
     }
 
-    const renderSelect = (name, label, options) => (
-        <label>
+    const handleSelectOption = (field, value) => {
+        setCar((currentCar) => ({ ...currentCar, [field]: value }))
+        setErrors((currentErrors) => ({ ...currentErrors, [field]: '', customization: '' }))
+    }
+
+    const renderInput = (name, label, props = {}) => (
+        <label className={name === 'description' ? 'full-width' : ''}>
             {label}
-            <select name={name} value={car[name]} onChange={handleChange}>
-                {options.map((option) => (
-                    <option key={option.value} value={option.value}>
-                        {option.label} (+${option.price.toLocaleString()})
-                    </option>
-                ))}
-            </select>
+            {name === 'description'
+                ? <textarea name={name} value={car[name]} onChange={handleChange} {...props} />
+                : <input name={name} value={car[name]} onChange={handleChange} {...props} />}
             {errors[name] && <small className='form-error'>{errors[name]}</small>}
         </label>
     )
@@ -57,62 +62,63 @@ const CarForm = ({ initialCar = emptyCar, submitLabel, onSubmit }) => {
         }
     }
 
+    const optionErrors = customizationCategories
+        .map(({ field }) => errors[field])
+        .concat(errors.customization)
+        .filter(Boolean)
+
+    // Price uses the current year until one is entered
+    const price = calculatePrice({ ...car, year: car.year || new Date().getFullYear() })
+
     return (
-        <main className='page-content'>
-            <article>
-                <header>
-                    <h2>{submitLabel === 'Create Car' ? 'Customize a car' : 'Edit car'}</h2>
-                    <p>Build your dream ride and save it to the garage.</p>
-                </header>
-                <form onSubmit={handleSubmit}>
-                    <label>
-                        Make
-                        <input name='make' value={car.make} onChange={handleChange} placeholder='Ford' />
-                        {errors.make && <small className='form-error'>{errors.make}</small>}
-                    </label>
-                    <label>
-                        Model
-                        <input name='model' value={car.model} onChange={handleChange} placeholder='Mustang' />
-                        {errors.model && <small className='form-error'>{errors.model}</small>}
-                    </label>
-                    <label>
-                        Year
-                        <input name='year' type='number' value={car.year} onChange={handleChange} placeholder='2024' />
-                        {errors.year && <small className='form-error'>{errors.year}</small>}
-                    </label>
-                    <label>
-                        Image URL
-                        <input name='image' type='url' value={car.image} onChange={handleChange} placeholder='https://...' />
-                        {errors.image && <small className='form-error'>{errors.image}</small>}
-                    </label>
-                    <label>
-                        Description
-                        <textarea name='description' value={car.description} onChange={handleChange} placeholder='Describe the custom build.' />
-                        {errors.description && <small className='form-error'>{errors.description}</small>}
-                    </label>
-                    <h3>Customize your build</h3>
-                    {renderSelect('exteriorColor', 'Exterior color', customizationOptions.exteriorColor)}
-                    {renderSelect('wheelStyle', 'Wheel style', customizationOptions.wheelStyle)}
-                    {renderSelect('interior', 'Interior', customizationOptions.interior)}
-                    {renderSelect('trimPackage', 'Trim package', customizationOptions.trimPackage)}
-                    {errors.customization && <p className='form-error'>{errors.customization}</p>}
-                    <div
-                        className='car-preview'
-                        style={{
-                            '--preview-color': customizationOptions.exteriorColor
-                                .find((option) => option.value === car.exteriorColor)?.hex
-                        }}
-                    >
-                        <span className='preview-car'>🚘</span>
-                        <span>{car.wheelStyle} wheels</span>
+        <main className='page-content customize-page'>
+            <form onSubmit={handleSubmit}>
+                <div className='customize-toolbar'>
+                    <div className='category-buttons'>
+                        {customizationCategories.map(({ field, label }) => (
+                            <button
+                                type='button'
+                                key={field}
+                                className={openCategory === field ? 'active' : ''}
+                                onClick={() => setOpenCategory(openCategory === field ? null : field)}
+                            >
+                                {label}
+                            </button>
+                        ))}
                     </div>
-                    {car.year && !errors.year && (
-                        <p className='price-summary'>Total estimated price: ${calculatePrice(car).toLocaleString()}</p>
-                    )}
-                    {requestError && <p className='form-error'>{requestError}</p>}
                     <button type='submit'>{submitLabel}</button>
-                </form>
-            </article>
+
+                    {openCategory && (
+                        <OptionPicker
+                            field={openCategory}
+                            car={car}
+                            onSelect={handleSelectOption}
+                            onDone={() => setOpenCategory(null)}
+                        />
+                    )}
+                </div>
+
+                {optionErrors.map((message) => <p key={message} className='form-error'>{message}</p>)}
+                {requestError && <p className='form-error'>{requestError}</p>}
+
+                <article className='customize-card'>
+                    <header>
+                        <h2>🏎️ {submitLabel === 'Create Car' ? 'Customize a car' : 'Edit car'}</h2>
+                    </header>
+                    <div className='form-grid'>
+                        {renderInput('make', 'Make', { placeholder: 'Chevrolet' })}
+                        {renderInput('model', 'Model', { placeholder: 'Corvette' })}
+                        {renderInput('year', 'Year', { type: 'number', placeholder: '2024' })}
+                        {renderInput('image', 'Image URL', { type: 'url', placeholder: 'https://...' })}
+                        {renderInput('description', 'Description', { placeholder: 'Describe the custom build.' })}
+                    </div>
+                    <div className='summary-grid'>
+                        <CarOptionTiles customization={car} />
+                    </div>
+                </article>
+            </form>
+
+            <div className='price-box'>💰 ${price.toLocaleString()}</div>
         </main>
     )
 }
