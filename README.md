@@ -13,8 +13,8 @@ The following **required** functionality is completed:
 <!-- Make sure to check off completed functionality below -->
 - [x] **The web app uses React to display data from the API.**
 - [x] **The web app is connected to a PostgreSQL database, with an appropriately structured `CustomItem` table.**
-  - [ ]  **NOTE: Add a walkthrough view of the Render dashboard demonstrating that the Postgres database is available.**
-  - [ ]  **NOTE: Add a walkthrough demonstration of the table contents using `SELECT * FROM cars;`.**
+  - [x]  **The walkthrough includes a view of the Render dashboard demonstrating that the Postgres database is available.**
+  - [x]  **The walkthrough includes a demonstration of the table contents using `SELECT * FROM cars;`.**
 - [x] **Users can view multiple features of the `CustomItem` (exterior color, wheels, interior, and trim).**
 - [x] **Each customizable feature has multiple options to choose from.**
 - [x] **On selecting options, the visual preview updates to match the exterior color and wheel choice.**
@@ -35,19 +35,28 @@ The following **optional** features are implemented:
 The following **additional** features are implemented:
 
 - [ ] List anything else that you added to improve the site's functionality!
+- [x] Five starter cars are seeded into the database with image URLs, so the garage is populated on first load.
+- [x] The database schema is initialized automatically when the server starts.
 
 ## Video Walkthrough
 
 Here's a walkthrough of implemented required features:
 
-<img src='http://i.imgur.com/link/to/your/gif/file.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+<img src='./Walkthrough.gif' title='Video Walkthrough' width='900' alt='Video Walkthrough' />
 
-<!-- Replace this with whatever GIF tool you used! -->
-GIF created with ...  GIF tool here
-<!-- Recommended tools:
-[Kap](https://getkap.co/) for macOS
-[ScreenToGif](https://www.screentogif.com/) for Windows
-[peek](https://github.com/phw/peek) for Linux. -->
+### Render PostgreSQL dashboard
+
+![Render PostgreSQL dashboard](./documents/render_dashboard.png)
+
+### PostgreSQL `cars` table contents
+
+![PostgreSQL cars table](./documents/database_table.png)
+
+The table screenshot shows the result of:
+
+```sql
+SELECT * FROM cars;
+```
 
 ## Notes
 
